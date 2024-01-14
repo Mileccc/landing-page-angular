@@ -8,35 +8,25 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ContactComponent implements OnInit {
   formularioContacto: FormGroup;
-  usuarioActivo: any = {
-    nombre: 'Sergio',
-    apellido: 'Gomez',
-    dni: '12345678'
-  };
+tipoDni: string = "";
 
   constructor(private form: FormBuilder) {
     this.formularioContacto = this.form.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       apellido: [''],
+      tipoDni: [''],
       dni: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
     });
   }
 
   ngOnInit(): void {
-      this.formularioContacto.get('apellido')?.setValidators([Validators.required, Validators.minLength(3)]);
-
-      this.formularioContacto.get('apellido')?.clearValidators();
-      this.formularioContacto.get('apellido')?.updateValueAndValidity();
-
-      //this.formularioContacto.get(`nombre`)?.setValue(this.usuarioActivo);
-      this.formularioContacto.patchValue({
-        nombre: this.usuarioActivo.nombre,
-        apellido: this.usuarioActivo.apellido,
-        dni: this.usuarioActivo.dni
+      // this.formularioContacto.valueChanges.subscribe(valor => {
+      //   console.log(valor);
+      // });
+      this.formularioContacto.get('tipoDni')?.valueChanges.subscribe((valor) => {
+        this.tipoDni = valor;
       })
-      this.formularioContacto.get('nombre')?.disable();
-      this.formularioContacto.get('dni')?.disable();
   }
 
   hasErrors( controlName: string , errorType: string){
