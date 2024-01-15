@@ -18,19 +18,16 @@
       
         <label for="tipoDni" class="form-label">Tipo de Documento</label>
         <select class="form-select"  id="tipoDni" formControlName="tipoDni">
-        <option value="DNI">DNI</option>
+        <option value="DNI">DNI </option>
         <option value="Pasaporte">Pasaporte</option>
         <option value="Carnet de conducir">Carnet de conducir</option>
       </select>
     </div>
       <div class="mb-3">
-        <label for="dni" class="form-label">{{tipoDni}}</label>
-        <input [ngClass]="{'is-invalid': hasErrors('dni', 'required') || hasErrors('dni', 'minlength')}" 
-        type="text" class="form-control" id="dni" formControlName="dni" />
-        <div class="text-danger" *ngIf="hasErrors('dni', 'required')">{{tipoDni}}requerido</div>
-        <div class="text-danger" *ngIf="hasErrors('dni', 'minlength')">{{tipoDni}} requiere mínimo 3 caracteres</div>
+        <dni-input [tipoDni]="tipoDni"/>
+        
       </div>
-    <div class="mb-3">
+    <div class="mb-3" *ngIf="mostrarDNI">
       <label for="email" class="form-label">Email</label>
       <input [ngClass]="{'is-invalid': hasErrors('email', 'required') || hasErrors('email', 'email')}"
       type="email" class="form-control" id="email" formControlName="email" />

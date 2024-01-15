@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Product, productsList } from '../product/product.mock';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { IProduct } from '../models/product.model';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-product-deatil',
@@ -8,21 +10,33 @@ import { Product, productsList } from '../product/product.mock';
   styleUrls: ['./product-deatil.component.css'],
 })
 export class ProductDeatilComponent implements OnInit {
-
-  product?: Product;
-  products: Product[] = productsList;
+  product?: IProduct;
+  products: IProduct[] = [];
   loading: boolean = true;
   valor_color: string = '';
 
-
-  constructor(private _route: ActivatedRoute) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _apiService: ApiService
+  ) {}
   ngOnInit(): void {
-   setTimeout(() => {
-    this._route.params.subscribe((params) => {
-      this.product = this.products.find(product => product.id == params['productId']);
-      this.valor_color = this.product?.price as number > 5 ? 'red' : '';
-      this.loading = false;
+    this._route.params.subscribe({
+      next: (params: Params) => {
+        this._apiService.getProductById(Number(params['productId'])).subscribe({
+          next: (data: IProduct) => {
+            this.product = data;
+            this.valor_color = (this.product?.price as number) > 200 ? 'red' : '';
+            this.loading = false;
+          },
+          error: (error: any) => {
+            console.log(error);
+            this.loading = false;
+          },
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
     });
-   }, 1500);
   }
 }
